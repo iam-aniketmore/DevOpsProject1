@@ -20,5 +20,5 @@
 - Copy Public IP and connect to server through kitty/putty
 - Select downloaded key pair to connect
 - Set system hostname and timezone to identify the server.
-####$sudo hostnamectl set-hostname dev1
-####$sudo timedatectl set-timezone Asia/Kolkata
+#### $sudo hostnamectl set-hostname dev1
+#### $sudo timedatectl set-timezone Asia/Kolkata
