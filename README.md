@@ -15,6 +15,8 @@
 - Familiarity with Docker, Git, Ansible
 ## Step 1: Setup Developer System on AWS EC2 Instance
 - Launch a EC2 Instance - Amazon linux
+- <img width="529" height="373" alt="image" src="https://github.com/user-attachments/assets/daab318d-dc4d-4168-9737-7a273ae48276" />
+
 - Instance type- t2.micro
 - Select key pair and click on launch instance
 - Copy Public IP and connect to server through kitty/putty
