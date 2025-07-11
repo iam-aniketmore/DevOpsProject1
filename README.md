@@ -125,14 +125,12 @@ Goto github repository and refresh page - verify code is uploaded.
 $sudo hostnamectl set-hostname jenkins
 $sudo timedatectl set-timezone Asia/Kolkata
 ```
-             ---------------------------------------
 ### 2.Install java
 ```
 #yum update -y
 #yum install java-11* -y
 #java -version
 ```
-             ---------------------------------------
 ### 3.Create tomcat user and group
 ```
 #groupadd --system tomcat
@@ -141,18 +139,16 @@ $sudo timedatectl set-timezone Asia/Kolkata
 #### Why this step-
 #### This create a dedicated system user and group for Tomcat so that it doesn’t run as root.
 
-             ---------------------------------------
 ### 4.Install Tomcat 9 on Amazon Linux 2
 ```
 #wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.tar.gz
 ```
 <img width="636" height="68" alt="image" src="https://github.com/user-attachments/assets/df079120-573a-4f91-a20b-9dcd38caae64" />
-             ---------------------------------------
 ### 5.Use tar command line tool to extract downloaded archive.
 ```
 #tar -xvzf apache-tomcat-9.0.63.tar.gz -C /usr/share/
 ```
-             ---------------------------------------
+             
 ### 6.Create Symlink to the folder /usr/share/tomcat. This is for easy updates.
 ```
 #ln -s /usr/share/apache-tomcat-9.0.63/ /usr/share/tomcat
@@ -160,7 +156,7 @@ $sudo timedatectl set-timezone Asia/Kolkata
 #### Why this step-
 #### This make version upgrades easier in the future
 
-             ---------------------------------------
+             
 ### 7.Update folder permissions
 ```
 #chown -R tomcat:tomcat /usr/share/tomcat
@@ -169,7 +165,7 @@ $sudo timedatectl set-timezone Asia/Kolkata
 ##### Why this step-
 ##### These commands change the ownership of Tomcat’s directories to the tomcat user and group we created earlier. It ensures that only the Tomcat user can read/write/execute within its directories, which enhances security and proper functioning.
 ##### -R means recursive – it applies to all subdirectories and files.
-             ---------------------------------------
+             
 ### 8.Create Tomcat Systemd service
 
 ##### Run following code to create tomcat service in a single command on terminal
@@ -201,7 +197,7 @@ EOF
 ##### Why this step-
 ##### This will create a systemd service unit file to manage Tomcat like any other Linux service. This will allow us to easily start, stop, enable, or check the status of Tomcat using systemctl commands.
 
-             ---------------------------------------
+             
 ### 8.Enable and start tomcat service:
 ```
 #systemctl daemon-reload
@@ -210,7 +206,7 @@ EOF
 #systemctl status tomcat
 ```
 <img width="642" height="158" alt="image" src="https://github.com/user-attachments/assets/20525bd9-09c9-4b11-a997-adb28d049fe8" />
-             ---------------------------------------
+             
 ### 9.Configure Tomcat Authentication
 
 ##### Why this step-
@@ -227,7 +223,7 @@ EOF
   :wq
 ```
 <img width="626" height="209" alt="image" src="https://github.com/user-attachments/assets/b919b405-9564-4a80-893c-3424f6a60e08" />
-             ---------------------------------------
+             
 ### 10.Configure Apache web server as a proxy for Tomcat server. First install httpd package.
 
 ##### Why this step-
@@ -235,7 +231,7 @@ EOF
 ```
 #yum install httpd  -y
 ```
-             ---------------------------------------
+             
 ### 12.Create VirtualHost file for Tomcat Admin web interface:
 
 ##### Why this step-
@@ -259,14 +255,14 @@ ProxyPass / ajp://localhost:8009/
 ProxyPassReverse / ajp://localhost:8009/
 </VirtualHost>
 ```
-             ---------------------------------------
+             
 ### 13.Restart and enable httpd service:
 ```
 #systemctl start httpd
 #systemctl enable httpd
 #systemctl status httpd
 ```
-             ---------------------------------------
+             
 ### 14.Open Web Browser and open address
 
 ##### http://192.168.1.111
@@ -278,13 +274,13 @@ ProxyPassReverse / ajp://localhost:8009/
 
 <img width="516" height="361" alt="image" src="https://github.com/user-attachments/assets/85c5b959-76b5-43c3-9dae-c8dc22469097" />
 <img width="438" height="281" alt="image" src="https://github.com/user-attachments/assets/07c7bfb7-d49e-4bc9-b28e-a0203afb6ab7" />
-             ---------------------------------------
+             
 ### 15. Open terminal and configure jenkins
 ```
 #cd /usr/share/tomcat/webapps
 #ls
 ```
-             ---------------------------------------
+             
 ### 16.	Download jenkins war file
 ```
 #wget wget https://updates.jenkins.io/download/war/2.462/jenkins.war
@@ -293,11 +289,11 @@ ProxyPassReverse / ajp://localhost:8009/
 ```
 #systemctl restart tomcat
 ```
-             ---------------------------------------
+             
 ### 17.	Open Web Browser and open address
 #### http://13.214.176.70/jenkins
 
-             ---------------------------------------
+             
 ### 18.Login into jenkins
 
 #### Go to linux get default password using following command
@@ -309,7 +305,7 @@ ProxyPassReverse / ajp://localhost:8009/
 #### Getting Started - Customize Jenkins – Install suggested plugins.
 
 <img width="562" height="289" alt="image" src="https://github.com/user-attachments/assets/9f6a581c-332d-4b54-9acc-1f87bb5fe76a" />
-             ---------------------------------------
+             
 ### 19.Set jenkins new credentials
 #### username: admin
 #### password: 111
