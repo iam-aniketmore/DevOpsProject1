@@ -8,7 +8,7 @@
 - Build & Deploy process using Jenkins
 - Test the Deployment
   
-Prerequisites
+##Prerequisites
 - AWS account (EC2 Ubuntu/AL2023 instances)
 - GitHub account
 - utty/Kitty to access the server
