@@ -13,6 +13,9 @@
 - GitHub account
 - utty/Kitty to access the server
 - Familiarity with Docker, Git, Ansible
+
+  -----------------------------------------------------------------------------------------------
+
 ## Step 1: Setup Developer System on AWS EC2 Instance
 - Launch a EC2 Instance - Amazon linux
   
@@ -82,6 +85,8 @@ $sudo timedatectl set-timezone Asia/Kolkata
   ```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/4a352034-9900-4998-abd3-1e9d06c6b11a" />
 
+-----------------------------------------------------------------------------------------------
+
 ## Step2: Create repository in github.com ( DevOpsProject1)
 
 ### Open browser - github.com -create repository - "DevOpsProject1"
@@ -104,6 +109,8 @@ $sudo timedatectl set-timezone Asia/Kolkata
 Goto github repository and refresh page - verify code is uploaded.
 
 <img width="621" height="260" alt="image" src="https://github.com/user-attachments/assets/76aba7ac-59e2-4385-afd6-7ef56f547e6a" />
+
+-----------------------------------------------------------------------------------------------
 
 ## Step3: Setup jenkins server ( use AL2023 t3.small )
 
@@ -304,6 +311,8 @@ ProxyPassReverse / ajp://localhost:8009/
 
 <img width="543" height="242" alt="image" src="https://github.com/user-attachments/assets/c0e53fb4-ea94-44c8-b509-07a0235b3248" />
 
+-----------------------------------------------------------------------------------------------
+
 ### Step4:  Setup required tools path such as java,maven etc.
 
 ##### Why this step-
@@ -330,7 +339,6 @@ PATH=$PATH:$JAVA_HOME:$HOME/bin
 #source .bash_profile
 #echo $PATH
 ```
------------------------------------------------------------------------------------
 ### 2.Install Maven Amazon Linux AMI2
 
 ##### Following are the set of commands need to be executed sequentially to install maven.
@@ -341,7 +349,6 @@ PATH=$PATH:$JAVA_HOME:$HOME/bin
 #rm -rvf  *.gz
 #mvn –version
 ```
------------------------------------------------------------------------------------
 ### 3.Set path for maven and java (This ensures both tools are available system-wide for Jenkins and terminal operations.) 
 ```
 #cd
@@ -366,6 +373,7 @@ PATH=$PATH:$JAVA_HOME:$MAVEN_HOME:$M2:$HOME/bin
 #git  --version
 #which git
 ```
+-----------------------------------------------------------------------------------------------
 
 ### Step 5:  Create project for pull code and build war file
 
@@ -412,6 +420,8 @@ Also set branch main
 
 <img width="573" height="394" alt="image" src="https://github.com/user-attachments/assets/da7332eb-9362-4f79-b729-a218d72e1ee0" />
 
+-----------------------------------------------------------------------------------------------
+
 ## Step 6. Create ansible server: ( AL 2023)
 -------------------------------------------------------------------------------------
 ### 1.use following bootstrap code for launch ec2 for ansible
@@ -428,7 +438,7 @@ sed 's/PasswordAuthentication no/PasswordAuthentication yes/' -i /etc/ssh/sshd_c
 echo PermitRootLogin yes >> /etc/ssh/sshd_config
 systemctl restart sshd
 ```
--------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
 ## Step 7. Create Docker server: ( AL 2023)
 
@@ -445,7 +455,7 @@ sed 's/PasswordAuthentication no/PasswordAuthentication yes/' -i /etc/ssh/sshd_c
 echo PermitRootLogin yes >> /etc/ssh/sshd_config
 systemctl restart sshd
 ```
--------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
 ## Step 8: Create connectivity between ansible and docker-nodes
 
@@ -624,6 +634,8 @@ $vim /opt/project/create-docker-container.yml
 
 ##### The above issue occurs because whenever we try to access the Tomcat server from the browser it will look for the files in /webapps directory which is empty and the actual files are being stored in /webapps.dist.
 ##### So in order to fix this issue we will copy all the content from webapps.dist to webapps directory and that will resolve the issue.
+
+-----------------------------------------------------------------------------------------------
 
 ## Step10: For Verify
 
