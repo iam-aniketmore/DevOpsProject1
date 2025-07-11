@@ -87,7 +87,7 @@
 * #git remote add origin https://github.com/iam-aniketmore/DevOpsProject1.git
   
 #### Push your local commits to GitHub
-* #git push https://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@github.com/iam-aniketmore/DevOpsProject1.git     (Push code to github)
+* #git push https://ghp_8Efyyta8V6l7fjdjdfdhhdfhhawtpZb3e@github.com/iam-aniketmore/DevOpsProject1.git     (Push code to github)
 
 <img width="604" height="117" alt="image" src="https://github.com/user-attachments/assets/23e1db81-2bd5-4aaf-9168-ea9cf9b22f1a" />
 
@@ -95,7 +95,7 @@ Goto github repository and refresh page - verify code is uploaded.
 
 <img width="621" height="260" alt="image" src="https://github.com/user-attachments/assets/76aba7ac-59e2-4385-afd6-7ef56f547e6a" />
 
-Step3: Setup jenkins server ( use AL2023 t3.small )
+## Step3: Setup jenkins server ( use AL2023 t3.small )
 
 - Select Amazon linux - Select t3 small - select key pair and launch instance.
 
@@ -144,13 +144,13 @@ Step3: Setup jenkins server ( use AL2023 t3.small )
 * #chown -R tomcat:tomcat /usr/share/tomcat
 * #chown -R tomcat:tomcat /usr/share/apache-tomcat-9.0.63/
 
-#### Why this step-
-#### These commands change the ownership of Tomcat’s directories to the tomcat user and group we created earlier. It ensures that only the Tomcat user can read/write/execute within its directories, which enhances security and proper functioning.
-#### -R means recursive – it applies to all subdirectories and files.
+##### Why this step-
+##### These commands change the ownership of Tomcat’s directories to the tomcat user and group we created earlier. It ensures that only the Tomcat user can read/write/execute within its directories, which enhances security and proper functioning.
+##### -R means recursive – it applies to all subdirectories and files.
 
 ### 8.Create Tomcat Systemd service
 
-#### Run following code to create tomcat service in a single command on terminal
+##### Run following code to create tomcat service in a single command on terminal
 * #tee /etc/systemd/system/tomcat.service<<EOF
 [Unit]
 Description=Tomcat Server
@@ -175,8 +175,8 @@ ExecStop=/usr/share/tomcat/bin/catalina.sh stop
 WantedBy=multi-user.target
 EOF
 
-#### Why this step-
-#### This will create a systemd service unit file to manage Tomcat like any other Linux service. This will allow us to easily start, stop, enable, or check the status of Tomcat using systemctl commands.
+##### Why this step-
+##### This will create a systemd service unit file to manage Tomcat like any other Linux service. This will allow us to easily start, stop, enable, or check the status of Tomcat using systemctl commands.
 
 
 ### 8.Enable and start tomcat service:
@@ -190,31 +190,31 @@ EOF
 
 ### 9.Configure Tomcat Authentication
 
-#### Why this step-
-#### We have to edit Tomcat configuration file to enable Admin and Manager UI roles.
-#### Tomcat comes without access to its web GUI (admin & manager) by default for security reasons. So, to use the web dashboard, you must define roles and users manually in the tomcat-users.xml file.
+##### Why this step-
+##### We have to edit Tomcat configuration file to enable Admin and Manager UI roles.
+##### Tomcat comes without access to its web GUI (admin & manager) by default for security reasons. So, to use the web dashboard, you must define roles and users manually in the tomcat-users.xml file.
 
 * #vim /usr/share/tomcat/conf/tomcat-users.xml
 #### Add below lines before closing with </tomcat-users>
 
-* <role rolename="admin-gui"/>
-* <role rolename="manager-gui"/>
-* <user username="admin" password="111" fullName="Administrator" roles="admin-gui,manager-gui"/>
-* :wq
+  <role rolename="admin-gui"/>
+  <role rolename="manager-gui"/>
+  <user username="admin" password="111" fullName="Administrator" roles="admin-gui,manager-gui"/>
+  :wq
 
 <img width="626" height="209" alt="image" src="https://github.com/user-attachments/assets/b919b405-9564-4a80-893c-3424f6a60e08" />
 
 ### 10.Configure Apache web server as a proxy for Tomcat server. First install httpd package.
 
-#### Why this step-
-#### Installing Apache (httpd) allows you to forward traffic from port 80 to Tomcat on 8080, improving accessibility, flexibility, and security.
+##### Why this step-
+##### Installing Apache (httpd) allows you to forward traffic from port 80 to Tomcat on 8080, improving accessibility, flexibility, and security.
 
 * #yum install httpd  -y
 
 ### 12.Create VirtualHost file for Tomcat Admin web interface:
 
-#### Why this step-
-#### We are telling the Apache server how to forward web traffic to your Tomcat server (running on port 8080 or 8009) using proxy directives.
+##### Why this step-
+##### We are telling the Apache server how to forward web traffic to your Tomcat server (running on port 8080 or 8009) using proxy directives.
 
 * #vim /etc/httpd/conf.d/tomcat_manager.conf
 <VirtualHost *:80>
@@ -244,12 +244,12 @@ ProxyPassReverse / ajp://localhost:8009/
 
 ### 14.Open Web Browser and open address
 
-#### http://192.168.1.111
-#### login tomcat with proper authentication
+##### http://192.168.1.111
+##### login tomcat with proper authentication
 
-#### Manage App
-#### username: admin	
-#### password: 111
+##### Manage App
+##### username: admin	
+##### password: 111
 
 <img width="516" height="361" alt="image" src="https://github.com/user-attachments/assets/85c5b959-76b5-43c3-9dae-c8dc22469097" />
 <img width="438" height="281" alt="image" src="https://github.com/user-attachments/assets/07c7bfb7-d49e-4bc9-b28e-a0203afb6ab7" />
