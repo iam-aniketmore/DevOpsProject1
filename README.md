@@ -7,6 +7,7 @@
 - Integrate Docker with Jenkins using Ansible
 - Build & Deploy process using Jenkins
 - Test the Deployment
+  
 Prerequisites
 - AWS account (EC2 Ubuntu/AL2023 instances)
 - GitHub account
