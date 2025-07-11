@@ -272,9 +272,9 @@ ProxyPassReverse / ajp://localhost:8009/
 ### 18.Login into jenkins
 
 #### Go to linux get default password using following command
-
+```bash
 * #cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
-
+```
 <img width="549" height="120" alt="image" src="https://github.com/user-attachments/assets/643a20a4-e2ca-4cd9-a1c0-b1b12e90b389" />
 
 #### Getting Started - Customize Jenkins – Install suggested plugins.
