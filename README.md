@@ -1,13 +1,14 @@
 # DevOps CI/CD Pipeline with Jenkins, Maven, GitHub, Ansible, Docker
 ### Agenda
 - Setup Jenkins
+  ___________________________________________________________________________
 - Setup & Configure Maven and Git
 - Integrate GitHub and Maven with Jenkins
 - Setup Docker Host
 - Integrate Docker with Jenkins using Ansible
 - Build & Deploy process using Jenkins
 - Test the Deployment
-  
+___________________________________________________________________________
 ### Prerequisites
 - AWS account (EC2 Ubuntu/AL2023 instances)
 - GitHub account
@@ -22,7 +23,7 @@
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/daab318d-dc4d-4168-9737-7a273ae48276" />
 
 - Instance type- t2.micro
-  
+  ___________________________________________________________________________
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/77314d55-075d-4ffa-938b-9759e1f43ab3" />
 
 - Select key pair and click on launch instance
