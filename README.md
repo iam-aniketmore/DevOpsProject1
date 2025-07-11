@@ -18,16 +18,20 @@
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/daab318d-dc4d-4168-9737-7a273ae48276" />
 
 - Instance type- t2.micro
+  
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/77314d55-075d-4ffa-938b-9759e1f43ab3" />
 
 - Select key pair and click on launch instance
+  
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/d646d6d7-393f-4bd2-b4d7-b0bf417cee0a" />
 
 - Copy Public IP and connect to server through kitty/putty
+  
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/42fe90d4-94fa-4176-87be-1bf688f6b3ad" />
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/695c52a5-5c74-4794-b2d9-1a30e9267563" />
 
 - Select downloaded key pair to connect
+  
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/7eb99cf7-bfbd-4099-9e70-a80d12b73ed2" />
 
 - Set system hostname and timezone to identify the server.
@@ -38,6 +42,7 @@
   
 #### Install Git
 * #yum install git -y
+  
   <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/357a8b75-ab49-46de-bd9f-c563814e6906" />
 
 
