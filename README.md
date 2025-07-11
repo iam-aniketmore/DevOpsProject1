@@ -36,43 +36,50 @@
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/7eb99cf7-bfbd-4099-9e70-a80d12b73ed2" />
 
 #### Set system hostname and timezone to identify the server.
+```
 * $sudo hostnamectl set-hostname dev1
 * $sudo timedatectl set-timezone Asia/Kolkata
+```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/265f705f-966c-4b7c-b0db-e7f566205fa6" />
 
   
 #### Install Git
+```
 * #yum install git -y
-  
+  ```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/357a8b75-ab49-46de-bd9f-c563814e6906" />
 
 
 #### Create project directory and initialize Git
-
+```
 * #mkdir /devpro1   (creates a workspace)
 * #cd /devpro1
 * #git init		(Initiate as git repo)
-  
+ ``` 
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/a2473b98-c9fa-4be1-a56f-3d309a7f20ed" />
 
   
 #### Create user and email for git operation
+```
 * #git config --global user.name aniket
 * #git config --global user.email aniketmore@gmail.com
-
+```
 #### These are used to configure your Git identity — specifically, who is making commits.
 
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/bd10c1af-304f-4493-9ced-6d5d9385a54a" />
 
 #### Stage all files for commit
+```
 * #git add . 
-
+```
 #### Commit the staged files with a message
+```
 * #git commit -m ‘first commit’ .   
-
+```
 #### Check the current status of the repository
+```
 * #git status
-  
+  ```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/4a352034-9900-4998-abd3-1e9d06c6b11a" />
 
 ## Step2: Create repository in github.com ( DevOpsProject1)
