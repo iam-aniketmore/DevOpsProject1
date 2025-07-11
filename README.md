@@ -108,57 +108,50 @@ Step3: Setup jenkins server ( use AL2023 t3.small )
 * $sudo hostnamectl set-hostname jenkins
 * $sudo timedatectl set-timezone Asia/Kolkata
 
+### 2.Install java
 
+* #yum update -y
+* #yum install java-11* -y
+* #java -version
 
-2.Install java
+### 3.Create tomcat user and group
 
-#yum update -y
-#yum install java-11* -y
-#java -version
+* #groupadd --system tomcat
+* #useradd -d /usr/share/tomcat -r -s /bin/false -g tomcat tomcat
 
-3.Create tomcat user and group
+#### Why this step-
+#### This create a dedicated system user and group for Tomcat so that it doesn’t run as root.
 
-#groupadd --system tomcat
-#useradd -d /usr/share/tomcat -r -s /bin/false -g tomcat tomcat
+### 4.Install Tomcat 9 on Amazon Linux 2
 
-Why this step-
-This create a dedicated system user and group for Tomcat so that it doesn’t run as root.
-
-4.Install Tomcat 9 on Amazon Linux 2
-
-#wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.tar.gz
+* #wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.tar.gz
 
 <img width="636" height="68" alt="image" src="https://github.com/user-attachments/assets/df079120-573a-4f91-a20b-9dcd38caae64" />
 
-5.Use tar command line tool to extract downloaded archive.
+### 5.Use tar command line tool to extract downloaded archive.
 
-#tar -xvzf apache-tomcat-9.0.63.tar.gz -C /usr/share/
+* #tar -xvzf apache-tomcat-9.0.63.tar.gz -C /usr/share/
 
+### 6.Create Symlink to the folder /usr/share/tomcat. This is for easy updates.
 
+* #ln -s /usr/share/apache-tomcat-9.0.63/ /usr/share/tomcat
 
-6.Create Symlink to the folder /usr/share/tomcat. This is for easy updates.
+#### Why this step-
+#### This make version upgrades easier in the future
 
-#ln -s /usr/share/apache-tomcat-9.0.63/ /usr/share/tomcat
+### 7.Update folder permissions
 
-Why this step-
-This make version upgrades easier in the future
+* #chown -R tomcat:tomcat /usr/share/tomcat
+* #chown -R tomcat:tomcat /usr/share/apache-tomcat-9.0.63/
 
+#### Why this step-
+#### These commands change the ownership of Tomcat’s directories to the tomcat user and group we created earlier. It ensures that only the Tomcat user can read/write/execute within its directories, which enhances security and proper functioning.
+#### -R means recursive – it applies to all subdirectories and files.
 
+### 8.Create Tomcat Systemd service
 
-7.Update folder permissions
-
-#chown -R tomcat:tomcat /usr/share/tomcat
-#chown -R tomcat:tomcat /usr/share/apache-tomcat-9.0.63/
-
-Why this step-
-These commands change the ownership of Tomcat’s directories to the tomcat user and group we created earlier.
-- It ensures that only the Tomcat user can read/write/execute within its directories, which enhances security and proper functioning.
--R means recursive – it applies to all subdirectories and files.
-
-8.Create Tomcat Systemd service
-
-Run following code to create tomcat service in a single command on terminal
-#tee /etc/systemd/system/tomcat.service<<EOF
+#### Run following code to create tomcat service in a single command on terminal
+* #tee /etc/systemd/system/tomcat.service<<EOF
 [Unit]
 Description=Tomcat Server
 After=syslog.targetnetwork.target
@@ -182,48 +175,48 @@ ExecStop=/usr/share/tomcat/bin/catalina.sh stop
 WantedBy=multi-user.target
 EOF
 
-Why this step-
-This will create a systemd service unit file to manage Tomcat like any other Linux service. This will allow us to easily start, stop, enable, or check the status of Tomcat using systemctl commands.
+#### Why this step-
+#### This will create a systemd service unit file to manage Tomcat like any other Linux service. This will allow us to easily start, stop, enable, or check the status of Tomcat using systemctl commands.
 
 
-8.Enable and start tomcat service:
+### 8.Enable and start tomcat service:
 
-#systemctl daemon-reload
-#systemctl start tomcat
-#systemctl enable tomcat
-#systemctl status tomcat
+* #systemctl daemon-reload
+* #systemctl start tomcat
+* #systemctl enable tomcat
+* #systemctl status tomcat
 
 <img width="642" height="158" alt="image" src="https://github.com/user-attachments/assets/20525bd9-09c9-4b11-a997-adb28d049fe8" />
 
-9.Configure Tomcat Authentication
+### 9.Configure Tomcat Authentication
 
-Why this step-
-We have to edit Tomcat configuration file to enable Admin and Manager UI roles.
-- Tomcat comes without access to its web GUI (admin & manager) by default for security reasons. So, to use the web dashboard, you must define roles and users manually in the tomcat-users.xml file.
+#### Why this step-
+#### We have to edit Tomcat configuration file to enable Admin and Manager UI roles.
+#### Tomcat comes without access to its web GUI (admin & manager) by default for security reasons. So, to use the web dashboard, you must define roles and users manually in the tomcat-users.xml file.
 
-#vim /usr/share/tomcat/conf/tomcat-users.xml
-Add below lines before closing with </tomcat-users>
+* #vim /usr/share/tomcat/conf/tomcat-users.xml
+#### Add below lines before closing with </tomcat-users>
 
-<role rolename="admin-gui"/>
-<role rolename="manager-gui"/>
-<user username="admin" password="111" fullName="Administrator" roles="admin-gui,manager-gui"/>
-:wq
+* <role rolename="admin-gui"/>
+* <role rolename="manager-gui"/>
+* <user username="admin" password="111" fullName="Administrator" roles="admin-gui,manager-gui"/>
+* :wq
 
 <img width="626" height="209" alt="image" src="https://github.com/user-attachments/assets/b919b405-9564-4a80-893c-3424f6a60e08" />
 
-10.Configure Apache web server as a proxy for Tomcat server. First install httpd package.
+### 10.Configure Apache web server as a proxy for Tomcat server. First install httpd package.
 
-Why this step-
-Installing Apache (httpd) allows you to forward traffic from port 80 to Tomcat on 8080, improving accessibility, flexibility, and security.
+#### Why this step-
+#### Installing Apache (httpd) allows you to forward traffic from port 80 to Tomcat on 8080, improving accessibility, flexibility, and security.
 
-#yum install httpd  -y
+* #yum install httpd  -y
 
-12.Create VirtualHost file for Tomcat Admin web interface:
+### 12.Create VirtualHost file for Tomcat Admin web interface:
 
-Why this step-
-We are telling the Apache server how to forward web traffic to your Tomcat server (running on port 8080 or 8009) using proxy directives.
+#### Why this step-
+#### We are telling the Apache server how to forward web traffic to your Tomcat server (running on port 8080 or 8009) using proxy directives.
 
-#vim /etc/httpd/conf.d/tomcat_manager.conf
+* #vim /etc/httpd/conf.d/tomcat_manager.conf
 <VirtualHost *:80>
 ServerAdmin root@localhost
 ServerName tomcat.example.com
@@ -243,58 +236,58 @@ ProxyPassReverse / ajp://localhost:8009/
 
 :wq
 
-13.Restart and enable httpd service:
+### 13.Restart and enable httpd service:
 
-#systemctl start httpd
-#systemctl enable httpd
-#systemctl status httpd
+* #systemctl start httpd
+* #systemctl enable httpd
+* #systemctl status httpd
 
-14.Open Web Browser and open address
+### 14.Open Web Browser and open address
 
-http://192.168.1.111
-login tomcat with proper authentication
+#### http://192.168.1.111
+#### login tomcat with proper authentication
 
-- Manage App
-username: admin	
-password: 111
+#### Manage App
+#### username: admin	
+#### password: 111
 
 <img width="516" height="361" alt="image" src="https://github.com/user-attachments/assets/85c5b959-76b5-43c3-9dae-c8dc22469097" />
 <img width="438" height="281" alt="image" src="https://github.com/user-attachments/assets/07c7bfb7-d49e-4bc9-b28e-a0203afb6ab7" />
 
-5.	Open terminal and configure jenkins
+### 5. Open terminal and configure jenkins
 
-#cd /usr/share/tomcat/webapps
-#ls
+* #cd /usr/share/tomcat/webapps
+* #ls
 
-16.	Download jenkins war file
-#wget wget https://updates.jenkins.io/download/war/2.462/jenkins.war
+#### 16.	Download jenkins war file
+* #wget wget https://updates.jenkins.io/download/war/2.462/jenkins.war
 
-- Restart tomcat service and open jenkins
-#systemctl restart tomcat
+#### Restart tomcat service and open jenkins
+* #systemctl restart tomcat
 
-17.	Open Web Browser and open address
-http://13.214.176.70/jenkins
+### 17.	Open Web Browser and open address
+#### http://13.214.176.70/jenkins
 
 
-18.Login into jenkins
+### 18.Login into jenkins
 
-Go to linux get default password using following command
+#### Go to linux get default password using following command
 
-#cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
+* #cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
 
 <img width="549" height="120" alt="image" src="https://github.com/user-attachments/assets/643a20a4-e2ca-4cd9-a1c0-b1b12e90b389" />
 
-Getting Started - Customize Jenkins – Install suggested plugins.
+#### Getting Started - Customize Jenkins – Install suggested plugins.
 
 <img width="562" height="289" alt="image" src="https://github.com/user-attachments/assets/9f6a581c-332d-4b54-9acc-1f87bb5fe76a" />
 
-19.Set jenkins new credentials
-username: admin
-password: 111
+### 19.Set jenkins new credentials
+#### username: admin
+#### password: 111
 
 <img width="492" height="338" alt="image" src="https://github.com/user-attachments/assets/83a20308-79f5-45fd-bb50-0eee2704226b" />
 
-Login in Jenkin Dashboard. 
+#### Login in Jenkin Dashboard. 
 
 <img width="543" height="242" alt="image" src="https://github.com/user-attachments/assets/c0e53fb4-ea94-44c8-b509-07a0235b3248" />
 
