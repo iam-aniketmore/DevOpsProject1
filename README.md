@@ -37,32 +37,32 @@
 
 #### Set system hostname and timezone to identify the server.
 ```
-* $sudo hostnamectl set-hostname dev1
-* $sudo timedatectl set-timezone Asia/Kolkata
+$sudo hostnamectl set-hostname dev1
+$sudo timedatectl set-timezone Asia/Kolkata
 ```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/265f705f-966c-4b7c-b0db-e7f566205fa6" />
 
   
 #### Install Git
 ```
-* #yum install git -y
+#yum install git -y
   ```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/357a8b75-ab49-46de-bd9f-c563814e6906" />
 
 
 #### Create project directory and initialize Git
 ```
-* #mkdir /devpro1   (creates a workspace)
-* #cd /devpro1
-* #git init		(Initiate as git repo)
+#mkdir /devpro1   (creates a workspace)
+#cd /devpro1
+#git init		(Initiate as git repo)
  ``` 
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/a2473b98-c9fa-4be1-a56f-3d309a7f20ed" />
 
   
 #### Create user and email for git operation
 ```
-* #git config --global user.name aniket
-* #git config --global user.email aniketmore@gmail.com
+#git config --global user.name aniket
+#git config --global user.email aniketmore@gmail.com
 ```
 #### These are used to configure your Git identity — specifically, who is making commits.
 
@@ -70,15 +70,15 @@
 
 #### Stage all files for commit
 ```
-* #git add . 
+#git add . 
 ```
 #### Commit the staged files with a message
 ```
-* #git commit -m ‘first commit’ .   
+#git commit -m ‘first commit’ .   
 ```
 #### Check the current status of the repository
 ```
-* #git status
+#git status
   ```
 <img width="650" height="280" alt="image" src="https://github.com/user-attachments/assets/4a352034-9900-4998-abd3-1e9d06c6b11a" />
 
@@ -88,14 +88,17 @@
 
 #### Open terminal on dev system - 
 #### Set the default branch to main (instead of master)
-* #git branch -M main 
-
+```
+#git branch -M main 
+```
 #### Link the local repository with your GitHub remote repo
-* #git remote add origin https://github.com/iam-aniketmore/DevOpsProject1.git
-  
+```
+#git remote add origin https://github.com/iam-aniketmore/DevOpsProject1.git
+ ``` 
 #### Push your local commits to GitHub
-* #git push https://ghp_8Efyyta8V6l7fjdjdfdhhdfhhawtpZb3e@github.com/iam-aniketmore/DevOpsProject1.git     (Push code to github)
-
+```
+#git push https://ghp_8Efyyta8V6l7fjdjdfdhhdfhhawtpZb3e@github.com/iam-aniketmore/DevOpsProject1.git     (Push code to github)
+```
 <img width="604" height="117" alt="image" src="https://github.com/user-attachments/assets/23e1db81-2bd5-4aaf-9168-ea9cf9b22f1a" />
 
 Goto github repository and refresh page - verify code is uploaded.
@@ -111,46 +114,46 @@ Goto github repository and refresh page - verify code is uploaded.
 ### 1.Login on Jenkins_Server:
 
 #### Set system hostname and timezone to identify the server.
-
-* $sudo hostnamectl set-hostname jenkins
-* $sudo timedatectl set-timezone Asia/Kolkata
-
+```
+$sudo hostnamectl set-hostname jenkins
+$sudo timedatectl set-timezone Asia/Kolkata
+```
 ### 2.Install java
-
-* #yum update -y
-* #yum install java-11* -y
-* #java -version
-
+```
+#yum update -y
+#yum install java-11* -y
+#java -version
+```
 ### 3.Create tomcat user and group
-
-* #groupadd --system tomcat
-* #useradd -d /usr/share/tomcat -r -s /bin/false -g tomcat tomcat
-
+```
+#groupadd --system tomcat
+#useradd -d /usr/share/tomcat -r -s /bin/false -g tomcat tomcat
+```
 #### Why this step-
 #### This create a dedicated system user and group for Tomcat so that it doesn’t run as root.
 
 ### 4.Install Tomcat 9 on Amazon Linux 2
-
-* #wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.tar.gz
-
+```
+#wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.tar.gz
+```
 <img width="636" height="68" alt="image" src="https://github.com/user-attachments/assets/df079120-573a-4f91-a20b-9dcd38caae64" />
 
 ### 5.Use tar command line tool to extract downloaded archive.
-
-* #tar -xvzf apache-tomcat-9.0.63.tar.gz -C /usr/share/
-
+```
+#tar -xvzf apache-tomcat-9.0.63.tar.gz -C /usr/share/
+```
 ### 6.Create Symlink to the folder /usr/share/tomcat. This is for easy updates.
-
-* #ln -s /usr/share/apache-tomcat-9.0.63/ /usr/share/tomcat
-
+```
+#ln -s /usr/share/apache-tomcat-9.0.63/ /usr/share/tomcat
+```
 #### Why this step-
 #### This make version upgrades easier in the future
 
 ### 7.Update folder permissions
-
-* #chown -R tomcat:tomcat /usr/share/tomcat
-* #chown -R tomcat:tomcat /usr/share/apache-tomcat-9.0.63/
-
+```
+#chown -R tomcat:tomcat /usr/share/tomcat
+#chown -R tomcat:tomcat /usr/share/apache-tomcat-9.0.63/
+```
 ##### Why this step-
 ##### These commands change the ownership of Tomcat’s directories to the tomcat user and group we created earlier. It ensures that only the Tomcat user can read/write/execute within its directories, which enhances security and proper functioning.
 ##### -R means recursive – it applies to all subdirectories and files.
@@ -158,7 +161,8 @@ Goto github repository and refresh page - verify code is uploaded.
 ### 8.Create Tomcat Systemd service
 
 ##### Run following code to create tomcat service in a single command on terminal
-* #tee /etc/systemd/system/tomcat.service<<EOF
+```
+#tee /etc/systemd/system/tomcat.service<<EOF
 [Unit]
 Description=Tomcat Server
 After=syslog.targetnetwork.target
@@ -181,18 +185,18 @@ ExecStop=/usr/share/tomcat/bin/catalina.sh stop
 [Install]
 WantedBy=multi-user.target
 EOF
-
+```
 ##### Why this step-
 ##### This will create a systemd service unit file to manage Tomcat like any other Linux service. This will allow us to easily start, stop, enable, or check the status of Tomcat using systemctl commands.
 
 
 ### 8.Enable and start tomcat service:
-
-* #systemctl daemon-reload
-* #systemctl start tomcat
-* #systemctl enable tomcat
-* #systemctl status tomcat
-
+```
+#systemctl daemon-reload
+#systemctl start tomcat
+#systemctl enable tomcat
+#systemctl status tomcat
+```
 <img width="642" height="158" alt="image" src="https://github.com/user-attachments/assets/20525bd9-09c9-4b11-a997-adb28d049fe8" />
 
 ### 9.Configure Tomcat Authentication
@@ -200,30 +204,31 @@ EOF
 ##### Why this step-
 ##### We have to edit Tomcat configuration file to enable Admin and Manager UI roles.
 ##### Tomcat comes without access to its web GUI (admin & manager) by default for security reasons. So, to use the web dashboard, you must define roles and users manually in the tomcat-users.xml file.
-
-* #vim /usr/share/tomcat/conf/tomcat-users.xml
+```
+#vim /usr/share/tomcat/conf/tomcat-users.xml
+```
 #### Add below lines before closing with </tomcat-users>
-
+```
   <role rolename="admin-gui"/>
   <role rolename="manager-gui"/>
   <user username="admin" password="111" fullName="Administrator" roles="admin-gui,manager-gui"/>
   :wq
-
+```
 <img width="626" height="209" alt="image" src="https://github.com/user-attachments/assets/b919b405-9564-4a80-893c-3424f6a60e08" />
 
 ### 10.Configure Apache web server as a proxy for Tomcat server. First install httpd package.
 
 ##### Why this step-
 ##### Installing Apache (httpd) allows you to forward traffic from port 80 to Tomcat on 8080, improving accessibility, flexibility, and security.
-
-* #yum install httpd  -y
-
+```
+#yum install httpd  -y
+```
 ### 12.Create VirtualHost file for Tomcat Admin web interface:
 
 ##### Why this step-
 ##### We are telling the Apache server how to forward web traffic to your Tomcat server (running on port 8080 or 8009) using proxy directives.
-
-* #vim /etc/httpd/conf.d/tomcat_manager.conf
+```
+#vim /etc/httpd/conf.d/tomcat_manager.conf
 <VirtualHost *:80>
 ServerAdmin root@localhost
 ServerName tomcat.example.com
@@ -240,15 +245,14 @@ ProxyRequests Off
 ProxyPass / ajp://localhost:8009/
 ProxyPassReverse / ajp://localhost:8009/
 </VirtualHost>
-
-:wq
+```
 
 ### 13.Restart and enable httpd service:
-
-* #systemctl start httpd
-* #systemctl enable httpd
-* #systemctl status httpd
-
+```
+#systemctl start httpd
+#systemctl enable httpd
+#systemctl status httpd
+```
 ### 14.Open Web Browser and open address
 
 ##### http://192.168.1.111
@@ -262,16 +266,18 @@ ProxyPassReverse / ajp://localhost:8009/
 <img width="438" height="281" alt="image" src="https://github.com/user-attachments/assets/07c7bfb7-d49e-4bc9-b28e-a0203afb6ab7" />
 
 ### 5. Open terminal and configure jenkins
-
-* #cd /usr/share/tomcat/webapps
-* #ls
-
+```
+#cd /usr/share/tomcat/webapps
+#ls
+```
 #### 16.	Download jenkins war file
-* #wget wget https://updates.jenkins.io/download/war/2.462/jenkins.war
-
+```
+#wget wget https://updates.jenkins.io/download/war/2.462/jenkins.war
+```
 #### Restart tomcat service and open jenkins
-* #systemctl restart tomcat
-
+```
+#systemctl restart tomcat
+```
 ### 17.	Open Web Browser and open address
 #### http://13.214.176.70/jenkins
 
@@ -280,7 +286,7 @@ ProxyPassReverse / ajp://localhost:8009/
 
 #### Go to linux get default password using following command
 ```bash
-* #cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
+#cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
 ```
 <img width="549" height="120" alt="image" src="https://github.com/user-attachments/assets/643a20a4-e2ca-4cd9-a1c0-b1b12e90b389" />
 
