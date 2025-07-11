@@ -270,7 +270,7 @@ ProxyPassReverse / ajp://localhost:8009/
 #cd /usr/share/tomcat/webapps
 #ls
 ```
-#### 16.	Download jenkins war file
+### 16.	Download jenkins war file
 ```
 #wget wget https://updates.jenkins.io/download/war/2.462/jenkins.war
 ```
@@ -304,5 +304,346 @@ ProxyPassReverse / ajp://localhost:8009/
 
 <img width="543" height="242" alt="image" src="https://github.com/user-attachments/assets/c0e53fb4-ea94-44c8-b509-07a0235b3248" />
 
+### Step4:  Setup required tools path such as java,maven etc.
 
+##### Why this step-
+##### Configured Java environment path by updating .bash_profile with JAVA_HOME and modifying PATH. This ensures Java is globally accessible for all build tools like Maven and Jenkins.
 
+#### 1.Set java path
+
+#####- Verify Version
+```
+#java -version
+```
+
+##### Update path in bash profile
+```
+#cd
+#vim .bash_profile
+```
+```
+JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64/bin/java
+PATH=$PATH:$JAVA_HOME:$HOME/bin
+```
+```
+#echo $PATH
+#source .bash_profile
+#echo $PATH
+```
+-----------------------------------------------------------------------------------
+### 2.Install Maven Amazon Linux AMI2
+
+##### Following are the set of commands need to be executed sequentially to install maven.
+```
+#cd /opt/
+#wget  https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz
+#tar -xvzf  apache-maven-3.8.8-bin.tar.gz
+#rm -rvf  *.gz
+#mvn –version
+```
+-----------------------------------------------------------------------------------
+### 3.Set path for maven and java (This ensures both tools are available system-wide for Jenkins and terminal operations.) 
+```
+#cd
+#vim .bash_profile
+JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64/bin/java
+MAVEN_HOME=/opt/apache-maven-3.8.8
+M2=/opt/apache-maven-3.8.8/bin/
+PATH=$PATH:$JAVA_HOME:$MAVEN_HOME:$M2:$HOME/bin
+
+#source .bash_profile
+#echo $M2
+#echo $PATH
+#echo $MAVEN_HOME
+```
+
+<img width="603" height="263" alt="image" src="https://github.com/user-attachments/assets/89f87956-a9c1-4f64-8c90-b2a6295bad2d" />
+
+### 4.Install git:
+```
+#yum update -y
+#yum install git -y
+#git  --version
+#which git
+```
+
+### Step 5:  Create project for pull code and build war file
+
+##### 1.Open Jenkins
+
+##### http://localhost/jenkins
+
+#### Dashboard – Manage Jenkins – Tools – git – Name (default) – path to git execute (/bin/git)
+
+#### Maven – add maven – Name (mvn) – MAVEN_HOME(/opt/apache-maven-3.8.8/)– 
+#### Apply – Save.
+
+##### Why this step - 
+##### Jenkins needs to know where Git and Maven are installed on your system to use them in build pipelines. Without this configuration, Jenkins jobs will fail when they try to use git or mvn.
+
+<img width="528" height="310" alt="image" src="https://github.com/user-attachments/assets/970ca14a-ac56-4cbd-9626-23db100987c2" />
+
+<img width="555" height="422" alt="image" src="https://github.com/user-attachments/assets/20fb554f-0c15-4138-b948-8a2777ff210f" />
+
+### 2.Open Jenkins.
+
+#### http://localhost/jenkins
+
+#### Dashboard – New Item – Enter new item name (devpro2025) – freestyle project – ok – source code management – git – repository url ( https://github.com/iam-aniketmore/DevOpsProject1.git ) 
+#### Build Steps (invoke top-level maven targets ) – Maven version (mvn) – Goals ( clean install package ) – Apply – Save.
+Also set branch main
+
+##### Why this step- 
+##### We are now creating a Jenkins job that will:
+##### - Pull the source code from GitHub
+##### - Use Maven to build it
+##### - Run steps like clean install package
+##### - This enables automated CI/CD
+
+<img width="572" height="353" alt="image" src="https://github.com/user-attachments/assets/c1619866-407d-4905-bd96-9412fae569b2" />
+
+<img width="554" height="289" alt="image" src="https://github.com/user-attachments/assets/5a67c66c-7f73-4a80-8b23-c6a4288b0052" />
+
+<img width="554" height="287" alt="image" src="https://github.com/user-attachments/assets/b924a0ee-1342-4d9c-945e-f215b5239761" />
+
+<img width="521" height="417" alt="image" src="https://github.com/user-attachments/assets/d26465e9-e5c6-45fc-a3a1-8d045ce65121" />
+
+#### Dashboard – devpro2025 – Build Now – console output.
+
+<img width="573" height="394" alt="image" src="https://github.com/user-attachments/assets/da7332eb-9362-4f79-b729-a218d72e1ee0" />
+
+## Step 6. Create ansible server: ( AL 2023)
+-------------------------------------------------------------------------------------
+### 1.use following bootstrap code for launch ec2 for ansible
+```
+#!/bin/bash
+yum update -y
+yum install ansible* -y
+hostnamectl  set-hostname ansible
+useradd itadmin
+echo 111 | passwd --stdin itadmin
+echo 111 | passwd --stdin root
+echo "itadmin  ALL=(ALL)   NOPASSWD: ALL" >> /etc/sudoers
+sed 's/PasswordAuthentication no/PasswordAuthentication yes/' -i /etc/ssh/sshd_config
+echo PermitRootLogin yes >> /etc/ssh/sshd_config
+systemctl restart sshd
+```
+-------------------------------------------------------------------------------------
+
+## Step 7. Create Docker server: ( AL 2023)
+
+### 1. use following bootstrap code for launch ec2 for docker-node1
+```
+#!/bin/bash
+yum update -y
+hostnamectl  set-hostname docker-node1
+useradd itadmin
+echo 111 | passwd --stdin itadmin
+echo 111 | passwd --stdin root
+echo "itadmin  ALL=(ALL)   NOPASSWD: ALL" >> /etc/sudoers
+sed 's/PasswordAuthentication no/PasswordAuthentication yes/' -i /etc/ssh/sshd_config
+echo PermitRootLogin yes >> /etc/ssh/sshd_config
+systemctl restart sshd
+```
+-------------------------------------------------------------------------------------
+
+## Step 8: Create connectivity between ansible and docker-nodes
+
+#### Login as itadmin and establish ssh based authentication with Docker_server
+```
+$su itadmin
+$ssh-keygen
+```
+
+<img width="592" height="362" alt="image" src="https://github.com/user-attachments/assets/fd6721ae-9347-4007-9844-1471a90774d9" />
+
+### 1.Update /etc/hosts file
+```
+$sudo  vim /etc/hosts
+172.31.37.154 docker-node1
+```
+##### Why this step-
+##### To make it easier to connect to remote nodes by name (instead of IP), we add their IP–hostname mappings to the /etc/hosts file.
+
+<img width="616" height="173" alt="image" src="https://github.com/user-attachments/assets/a0a877a1-59d5-4a44-b72b-2496110a42d0" />
+
+### 2. Transfer generate ssh key to all nodes
+```
+$ssh-copy-id  itadmin@docker-node1
+```
+
+##### Why this step-
+##### This allows Ansible to connect and execute commands on remote hosts without prompting for a password every time.
+
+-----------------------------------------------------------------------------------------------
+
+### 3. Update inventory file
+```
+$sudo mkdir /opt/project
+$sudo  vim  /opt/project/inventory
+[docker]
+docker-node1
+docker-node2
+```
+
+##### This file tells Ansible which servers (nodes) it should manage.
+
+-----------------------------------------------------------------------------------------------
+### 3.Create ansible.cfg file
+```
+$sudo vim /opt/project/ansible.cfg
+[defaults]
+inventory=/opt/project/inventory
+remote_user=itadmin
+host_key_checking=false
+[privilege_escalation]
+become=true
+become_user=root
+become_method=sudo
+become_ask_pass=false
+```
+##### Why this step-
+##### This ensures Ansible knows where to look for the inventory file and how to handle privilege escalation and remote access.
+-----------------------------------------------------------------------------------------------
+
+### 5. Check ansible client (docker server) is reachable through ansible server
+```
+$cd   /opt/project/
+$ansible  all  -m  ping
+```
+-----------------------------------------------------------------------------------------------
+
+### 6. Create directory for store project webapp
+```
+$sudo  mkdir   /opt/docker
+$sudo chown -R itadmin:itadmin /opt/docker
+$sudo chown -R itadmin:itadmin /opt/project
+```
+##### Why this step-
+##### To manage and deploy the web application code effectively on Docker nodes, we first need to create a dedicated directory with appropriate permissions.
+-----------------------------------------------------------------------------------------------
+
+### 7.Create playbook for manage containers on docker-nodes
+##### Why this step-
+##### We’ll now create an Ansible playbook that automates the full container lifecycle on all Docker nodes. This includes installing Docker, managing images/containers, copying files, and deploying the WAR file in a Tomcat container inside Docker.
+```
+$vim /opt/project/create-docker-container.yml
+---
+ - name: create docker container
+   hosts: all
+   ignore_errors: yes
+   tasks:
+     - name: install docker
+       yum:
+         name: docker
+         state: present
+     - name: start and enable docker
+       service:
+         name: docker
+         state: started
+         enabled: yes
+     - name: add user into group
+       command: usermod -aG docker itadmin
+     - name: create docker directory
+       file:
+         path: /opt/docker
+         state: directory
+     - name: change ownership
+       command: chown -R itadmin:itadmin /opt/docker
+     - name: stop the running container
+       shell: docker stop webapp
+     - name: remove container
+       shell: docker rm -f webapp
+     - name: remove container image
+       shell: docker rmi -f myapp:latest
+     - name: transfer docker file
+       copy:
+         src: /opt/docker/Dockerfile
+         dest: /opt/docker/
+     - name: trasfer web appplication
+       copy:
+         src: /opt/docker/webapp.war
+         dest: /opt/docker/
+     - name: build docker image
+       shell: cd /opt/docker; docker build -t myapp.
+     - name: create docker tomcat container
+       shell: docker run -dt --name webapp -p 80:8080 myapp:latest
+
+```
+
+-----------------------------------------------------------------------------------------------
+
+## Step 9: Update in jenkins project
+
+### 1.Login Jenkins & install required plugins
+##### Why this step-
+##### To enable Jenkins to communicate with remote servers (like Ansible control node) and deploy applications using SSH, we need to install the “Publish Over SSH” plugin.
+
+#### Dashboard- manage Jenkins – manage plugins – available – install “publish over ssh” plugins – restart Jenkins.
+
+<img width="638" height="180" alt="image" src="https://github.com/user-attachments/assets/8f995003-aec8-4dc5-a071-3a1f9412c2f8" />
+
+### 2. Add ansible credentials 
+##### Why this step-
+##### Add the Ansible Control Node (host) credentials to Jenkins. This will allow Jenkins to send files and trigger commands (like Ansible playbooks) on the remote server.
+
+#### Dashboard – manage Jenkins – configure system – system –SSH Servers (add ) – Name (Ansible_Server) Hostname (192.168.1.112) – username (itadmin) – Advanced - use password authentication or use a different key (111) – Test Configuration – Apply - Save.
+
+<img width="498" height="402" alt="image" src="https://github.com/user-attachments/assets/0c599f26-6ecf-4b43-8cda-0749e39766fc" />
+
+### 3. Update devpro2025
+##### Why this step-
+##### After Jenkins builds our project and generates the .war file (web application archive), we need to transfer that .war file to the Ansible server, where it will be deployed using Docker.
+
+#### Open Dashboad – devpro2024 – Configure-
+#### Now click on “Post Build Action” – send build artifacts over SSH – Name (Ansible_Server) – Source files (webapp/target/*.war) – Remove prefix (webapp/target/) – Remote directory (//opt/docker)
+
+##### After the .war file is sent, we also need the Dockerfile on the Ansible server, because it defines how the Docker image will be built..
+
+#### Add Server
+#### Name (Ansible_Server) – Source files (Dockerfile) – Remote directory (//opt/docker)
+
+#####trigger the deployment using Ansible.
+
+#### Add Server
+#### Exec command
+#### cd /opt/project; ansible-playbook create-docker-container.yml
+
+##### Save - Apply 
+
+<img width="484" height="298" alt="image" src="https://github.com/user-attachments/assets/3c39d6be-8569-4aa4-85a7-56190b796f62" />
+
+<img width="475" height="361" alt="image" src="https://github.com/user-attachments/assets/846fb2bf-75ae-4f07-932b-283dbae2ef25" />
+
+### 4.Check and verify on browser
+##### You will get this error
+
+<img width="752" height="195" alt="image" src="https://github.com/user-attachments/assets/bba1b8e8-3ce6-430a-9767-41527f9d4ccd" />
+
+##### From the above screenshot, you can see that although there is a 404 error, it also displays Apache Tomcat at the bottom which means the installation is successful however this is a known issue with the Tomcat docker image that we will fix in the next steps.
+
+##### The above issue occurs because whenever we try to access the Tomcat server from the browser it will look for the files in /webapps directory which is empty and the actual files are being stored in /webapps.dist.
+##### So in order to fix this issue we will copy all the content from webapps.dist to webapps directory and that will resolve the issue.
+
+## Step10: For Verify
+
+### 1.Open docker docker-node1 terminal and check docker info
+```
+#docker images
+#docker ps
+#docker ps -a
+#ifconfig
+```
+### 2. Open web browser –
+#### http://dockerip/webapp
+#### You won’t see any details
+
+### 3. Open jenkins and Run Project
+#### Go to Jenkins dashboard – run created project (right click and build)
+
+#### Now again repeat step1 to verify docker info
+
+### 4. Open web browser –
+#### http://dockerip/webapp
+
+<img width="618" height="236" alt="image" src="https://github.com/user-attachments/assets/a373381a-290d-4393-8f84-0305a147515a" />
